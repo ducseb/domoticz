@@ -206,7 +206,8 @@ define(['app'], function (app) {
 									(item.Type.indexOf('ASA') == 0)||
 									(item.SubType=="Smartwares Mode")||
 									(item.SubType=="Relay")||
-									((typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Itho')==0))
+									((typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Itho')==0))||
+									((typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Lucci')==0))
 								)
 								&&(item.Favorite!=0))
 							{
@@ -226,7 +227,7 @@ define(['app'], function (app) {
 												status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("On") +'</button>';
 											}
 										}
-										else if (item.SwitchType == "Door Lock") {
+										else if (item.SwitchType == "Door Contact") {
 											if (item.InternalState=="Open") {
 												status='<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Open") +'</button> ' + 
 													'<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');">' + $.t("Lock") +'</button>';
@@ -235,6 +236,16 @@ define(['app'], function (app) {
 												status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Open") +'</button> ' + 
 													'<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');">' + $.t("Locked") +'</button>';
 											}
+										}
+										else if (item.SwitchType == "Door Lock") {
+										    if (item.InternalState == "Unlocked") {
+										        status = '<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');">' + $.t("Unlocked") + '</button> ' +
+													'<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');">' + $.t("Locked") + '</button>';
+										    }
+										    else {
+										        status = '<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');">' + $.t("Unlocked") + '</button> ' +
+													'<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');">' + $.t("Locked") + '</button>';
+										    }
 										}
 										else if (item.SwitchType == "Push Off Button") {
 											status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');">' + $.t("Off") +'</button>';
@@ -495,6 +506,34 @@ define(['app'], function (app) {
 												'<button class="' + class_3 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'3\',RefreshFavorites,' + item.Protected +');">' + $.t("3") +'</button> ' +
 												'<button class="' + class_timer + '" type="button" onclick="SwitchLight(' + item.idx + ',\'timer\',RefreshFavorites,' + item.Protected +');">' + $.t("Timer") +'</button>';
 										}					
+										else if (item.SubType.indexOf("Lucci")==0) {
+											var class_1 = "btn btn-mini";
+											var class_2 = "btn btn-mini";
+											var class_3 = "btn btn-mini";
+											var class_4 = "btn btn-mini";
+											var class_light = "btn btn-mini";
+											if (item.Status=="hi") {
+												class_1 += " btn-info";
+											}
+											else if (item.Status=="med") {
+												class_2 += " btn-info";
+											}
+											else if (item.Status=="low") {
+												class_3 += " btn-info";
+											}
+											else if (item.Status=="off") {
+												class_4 += " btn-info";
+											}
+											else if (item.Status=="light") {
+												class_light += " btn-info";
+											}
+											status=
+												'<button class="' + class_1 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'hi\',RefreshFavorites,' + item.Protected +');">' + $.t("hi") +'</button> ' +
+												'<button class="' + class_2 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'med\',RefreshFavorites,' + item.Protected +');">' + $.t("med") +'</button> ' +
+												'<button class="' + class_3 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'low\',RefreshFavorites,' + item.Protected +');">' + $.t("low") +'</button> ' +
+												'<button class="' + class_4 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'off\',RefreshFavorites,' + item.Protected +');">' + $.t("Off") +'</button> ' +
+												'<button class="' + class_light + '" type="button" onclick="SwitchLight(' + item.idx + ',\'light\',RefreshFavorites,' + item.Protected +');">' + $.t("Light") +'</button>';
+										}					
 										else {
 											if (
 													(item.Status == 'On')||
@@ -548,13 +587,21 @@ define(['app'], function (app) {
 												img='<img src="images/push48.png" title="' + $.t("Turn On") +'" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40">';
 											}
 										}
-										else if (item.SwitchType == "Door Lock") {
+										else if (item.SwitchType == "Door Contact") {
 											if (item.InternalState=="Open") {
 												img='<img src="images/door48open.png" title="' + $.t("Close Door") +'" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40">';
 											}
 											else {
 												img='<img src="images/door48.png" title="' + $.t("Open Door") +'" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40">';
 											}
+										}
+										else if (item.SwitchType == "Door Lock") {
+										    if (item.InternalState == "Unlocked") {
+										        img = '<img src="images/door48open.png" title="' + $.t("Lock") + '" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');" class="lcursor" height="40" width="40">';
+										    }
+										    else {
+										        img = '<img src="images/door48.png" title="' + $.t("Unlock") + '" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');" class="lcursor" height="40" width="40">';
+										    }
 										}
 										else if (item.SwitchType == "Push Off Button") {
 											img='<img src="images/pushoff48.png" title="' + $.t("Turn Off") +'" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40">';
@@ -691,7 +738,7 @@ define(['app'], function (app) {
 														if (item.SubType=="RGB") {
 															img='<img src="images/RGB48_On.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40">';
 														}
-														else if (item.SubType=="RGBW") {
+														else if (item.SubType.indexOf("RGBW") >= 0) {
 															img='<img src="images/RGB48_On.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40">';
 														}
 														else {
@@ -702,7 +749,7 @@ define(['app'], function (app) {
 														if (item.SubType=="RGB") {
 															img='<img src="images/RGB48_Off.png" onclick="ShowRGBWPopup(event, ' + item.idx + ',\'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40">';
 														}
-														else if (item.SubType=="RGBW") {
+														else if (item.SubType.indexOf("RGBW") >= 0) {
 															img='<img src="images/RGB48_Off.png" onclick="ShowRGBWPopup(event, ' + item.idx + ',\'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40">';
 														}
 														else {
@@ -782,7 +829,7 @@ define(['app'], function (app) {
 												img += '<img src="images/' + item.Image + '48_On.png" title="' + $.t("Turn Off") + '" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40">';
 											}
 										}
-										else if (item.SubType.indexOf("Itho")==0) {
+										else if ((item.SubType.indexOf("Itho")==0)||(item.SubType.indexOf("Lucci")==0)) {
 											img=$(id + " #img").html();
 										}					
 										else {
@@ -1355,7 +1402,7 @@ define(['app'], function (app) {
 							(item.Type == "Weight") || 
 							(item.Type == "Usage")||
 							(item.SubType=="Percentage")||
-							((item.Type=="Fan")&&(typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Itho')!=0))||
+							//((item.Type=="Fan")&&(typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Lucci')!=0))||
 							((item.Type == "Thermostat")&&(item.SubType=="SetPoint"))||
 							(item.SubType=="kWh")||
 							(item.SubType=="Soil Moisture")||
@@ -1840,6 +1887,7 @@ define(['app'], function (app) {
 							(item.Type.indexOf('ASA') == 0)||
 							(item.SubType=="Relay")||
 							((typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Itho')==0))||
+							((typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Lucci')==0))||
 							((item.Type.indexOf('Value') == 0) && (typeof item.SwitchType != 'undefined'))
 						)
 					  )
@@ -1902,7 +1950,7 @@ define(['app'], function (app) {
 												status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("On") +'</button>';
 											}
 									}
-									else if (item.SwitchType == "Door Lock") {
+									else if (item.SwitchType == "Door Contact") {
 										if (item.InternalState=="Open") {
 												status='<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Open") +'</button> ' + 
 													'<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Lock") +'</button>';
@@ -1911,6 +1959,16 @@ define(['app'], function (app) {
 												status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Open") +'</button> ' + 
 													'<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');">' + $.t("Locked") +'</button>';
 											}
+									}
+									else if (item.SwitchType == "Door Lock") {
+									    if (item.InternalState == "Unlocked") {
+									        status = '<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');">' + $.t("Unlocked") + '</button> ' +
+                                                '<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');">' + $.t("Locked") + '</button>';
+									    }
+									    else {
+									        status = '<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');">' + $.t("Unlocked") + '</button> ' +
+                                                '<button class="btn btn-mini btn-info" type="button" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');">' + $.t("Locked") + '</button>';
+									    }
 									}
 									else if (item.SwitchType == "Push Off Button") {
 										status='<button class="btn btn-mini" type="button" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');">' + $.t("Off") +'</button>';
@@ -2140,6 +2198,34 @@ define(['app'], function (app) {
 											'<button class="' + class_3 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'3\',RefreshFavorites,' + item.Protected +');">' + $.t("3") +'</button> ' +
 											'<button class="' + class_timer + '" type="button" onclick="SwitchLight(' + item.idx + ',\'timer\',RefreshFavorites,' + item.Protected +');">' + $.t("Timer") +'</button>';
 									}					
+									else if (item.SubType.indexOf("Lucci")==0) {
+										var class_1 = "btn btn-mini";
+										var class_2 = "btn btn-mini";
+										var class_3 = "btn btn-mini";
+										var class_4 = "btn btn-mini";
+										var class_light = "btn btn-mini";
+										if (item.Status=="hi") {
+											class_1 += " btn-info";
+										}
+										else if (item.Status=="med") {
+											class_2 += " btn-info";
+										}
+										else if (item.Status=="low") {
+											class_3 += " btn-info";
+										}
+										else if (item.Status=="off") {
+											class_4 += " btn-info";
+										}
+										else if (item.Status=="light") {
+											class_light += " btn-info";
+										}
+										status=
+											'<button class="' + class_1 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'hi\',RefreshFavorites,' + item.Protected +');">' + $.t("hi") +'</button> ' +
+											'<button class="' + class_2 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'med\',RefreshFavorites,' + item.Protected +');">' + $.t("med") +'</button> ' +
+											'<button class="' + class_3 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'low\',RefreshFavorites,' + item.Protected +');">' + $.t("low") +'</button> ' +
+											'<button class="' + class_4 + '" type="button" onclick="SwitchLight(' + item.idx + ',\'off\',RefreshFavorites,' + item.Protected +');">' + $.t("Off") +'</button> ' +
+											'<button class="' + class_timer + '" type="button" onclick="SwitchLight(' + item.idx + ',\'light\',RefreshFavorites,' + item.Protected +');">' + $.t("Light") +'</button>';
+									}					
 									else {
 										if (
 												(item.Status == 'On')||
@@ -2275,13 +2361,21 @@ define(['app'], function (app) {
 											xhtm+='\t      <td id="img"><img src="images/push48.png" title="' + $.t("Turn On") +'" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40"></td>\n';
 										}
 									}
-									else if (item.SwitchType == "Door Lock") {
+									else if (item.SwitchType == "Door Contact") {
 										if (item.InternalState=="Open") {
 											xhtm+='\t      <td id="img"><img src="images/door48open.png" title="' + $.t("Close Door") +'" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40"></td>\n';
 										}
 										else {
 											xhtm+='\t      <td id="img"><img src="images/door48.png" title="' + $.t("Open Door") +'" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40"></td>\n';
 										}
+									}
+									else if (item.SwitchType == "Door Lock") {
+									    if (item.InternalState == "Unlocked") {
+									        xhtm += '\t      <td id="img"><img src="images/door48open.png" title="' + $.t("Lock") + '" onclick="SwitchLight(' + item.idx + ',\'On\',RefreshFavorites,' + item.Protected + ');" class="lcursor" height="40" width="40"></td>\n';
+									    }
+									    else {
+									        xhtm += '\t      <td id="img"><img src="images/door48.png" title="' + $.t("Unlock") + '" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected + ');" class="lcursor" height="40" width="40"></td>\n';
+									    }
 									}
 									else if (item.SwitchType == "Push Off Button") {
 										xhtm+='\t      <td id="img"><img src="images/pushoff48.png" title="' + $.t("Turn Off") +'" onclick="SwitchLight(' + item.idx + ',\'Off\',RefreshFavorites,' + item.Protected +');" class="lcursor" height="40" width="40"></td>\n';
@@ -2430,12 +2524,14 @@ define(['app'], function (app) {
 												(item.Status == 'On')||
 												(item.Status == 'Chime')||
 												(item.Status == 'Group On')||
-												(item.Status.indexOf('Set ') == 0)
+												(item.Status.indexOf('Set ') == 0)||
+												(item.Status.indexOf('NightMode') == 0)||
+												(item.Status.indexOf('Disco ') == 0)
 											 ) {
 													if (item.SubType=="RGB") {
 														xhtm+='\t      <td id="img"><img src="images/RGB48_On.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40"></td>\n';
 													}
-													else if (item.SubType=="RGBW") {
+													else if (item.SubType.indexOf("RGBW") >= 0) {
 														xhtm+='\t      <td id="img"><img src="images/RGB48_On.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40"></td>\n';
 													}
 													else {
@@ -2446,7 +2542,7 @@ define(['app'], function (app) {
 													if (item.SubType=="RGB") {
 														xhtm+='\t      <td id="img"><img src="images/RGB48_Off.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40"></td>\n';
 													}
-													else if (item.SubType=="RGBW") {
+													else if (item.SubType.indexOf("RGBW") >= 0) {
 														xhtm+='\t      <td id="img"><img src="images/RGB48_Off.png" onclick="ShowRGBWPopup(event, ' + item.idx + ', \'RefreshFavorites\',' + item.Protected + ',' + item.MaxDimLevel + ',' + item.LevelInt + ',' + item.Hue + ');" class="lcursor" height="40" width="40"></td>\n';
 													}
 													else {
@@ -2509,6 +2605,9 @@ define(['app'], function (app) {
 									else if (item.SubType.indexOf("Itho")==0) {
 										xhtm+='\t      <td id="img"><img src="images/Fan48_On.png" height="40" width="40" class="lcursor" onclick="ShowIthoPopup(event, ' + item.idx + ', RefreshFavorites, ' + item.Protected +');"></td>\n';
 									}					
+									else if (item.SubType.indexOf("Lucci")==0) {
+										xhtm+='\t      <td id="img"><img src="images/Fan48_On.png" height="40" width="40" class="lcursor" onclick="ShowLucciPopup(event, ' + item.idx + ', RefreshFavorites, ' + item.Protected +');"></td>\n';
+									}					
 									else {
 										if (
 												(item.Status == 'On')||
@@ -2538,7 +2637,7 @@ define(['app'], function (app) {
 												'\t      <td id="status">' + status + '</td>\n' +
 												'\t      <td id="lastupdate">' + item.LastUpdate + '</td>\n';
 									if (item.SwitchType == "Dimmer") {
-										if ((item.SubType=="RGBW")||(item.SubType=="RGB")) {
+										if ((item.SubType.indexOf("RGBW") >= 0)||(item.SubType=="RGB")) {
 										}
 										else {
 											xhtm+='<td><div style="margin-left:50px; margin-top: 0.2em;" class="dimslider dimslidernorm" id="slider" data-idx="' + item.idx + '" data-type="norm" data-maxlevel="' + item.MaxDimLevel + '" data-isprotected="' + item.Protected + '" data-svalue="' + item.LevelInt + '"></div></td>';
@@ -3264,7 +3363,7 @@ define(['app'], function (app) {
 							(item.Type == "Weight") || 
 							(item.Type == "Usage")||
 							(item.SubType == "Percentage")||	
-							((item.Type=="Fan")&&(typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Itho')!=0))||
+							//((item.Type=="Fan")&&(typeof item.SubType != 'undefined')&&(item.SubType.indexOf('Lucci')!=0))||
 							((item.Type == "Thermostat")&&(item.SubType=="SetPoint"))||
 							(item.SubType=="Soil Moisture")||
 							(item.SubType=="Leaf Wetness")||
